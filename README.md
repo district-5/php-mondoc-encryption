@@ -12,8 +12,11 @@ Mondoc Encryption, by District5
 
 ### Installing with composer
 
+Mondoc Encryption is used by, and leverages functionality from, the Mondoc library. You will need to install Mondoc in
+order to use Mondoc Encryption.
+
 ```
-composer require district5/mondoc-encryption
+composer require district5/mondoc
 ```
 
 ### Documentation...
