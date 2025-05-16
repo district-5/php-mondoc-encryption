@@ -12,7 +12,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "district5/mondoc": "7.2.0-beta1"
+    "district5/mondoc": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "*",
