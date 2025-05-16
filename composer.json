@@ -22,7 +22,6 @@
     "issues": "https://github.com/district-5/php-mondoc-encryption/issues"
   },
   "suggest": {
-    "ext-openssl": "Required if leveraging AES256 field encryption",
     "ext-sodium": "Required if leveraging Sodium secret key encryption"
   },
   "autoload": {
