@@ -1,0 +1,41 @@
+{
+  "name": "district5/mondoc-encryption",
+  "description": "Mondoc encryption provides the encrypt/decrypt functionality for Mondoc.",
+  "keywords": ["mondoc", "mongo", "mongodb", "odm", "encryption", "district5"],
+  "homepage": "https://github.com/district-5/php-mondoc-encryption",
+  "license": "mit",
+  "authors": [
+    {
+      "name": "District5",
+      "email": "hello@district5.co.uk"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "district5/mondoc": "dev-feature/field-encryption"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*",
+    "ext-sodium": "*"
+  },
+  "support": {
+    "issues": "https://github.com/district-5/php-mondoc-encryption/issues"
+  },
+  "suggest": {
+    "ext-openssl": "Required if leveraging AES256 field encryption",
+    "ext-sodium": "Required if leveraging Sodium secret key encryption"
+  },
+  "autoload": {
+    "psr-4": {
+      "District5\\MondocEncryption\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "District5Tests\\MondocEncryptionTests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
