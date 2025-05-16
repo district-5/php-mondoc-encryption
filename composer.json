@@ -11,12 +11,12 @@
     }
   ],
   "require": {
-    "php": ">=8.2.0",
-    "district5/mondoc": "*"
+    "php": ">=8.2.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "*",
-    "ext-sodium": "*"
+    "ext-sodium": "*",
+    "district5/mondoc": "*",
+    "phpunit/phpunit": "*"
   },
   "support": {
     "issues": "https://github.com/district-5/php-mondoc-encryption/issues"
