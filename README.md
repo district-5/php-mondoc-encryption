@@ -28,7 +28,20 @@ All documentation for Mondoc Encryption, Mondoc, and Mondoc Builder are availabl
 
 ### Testing
 
-You can run PHPUnit against the library by running `composer install` and then running `./vendor/bin/phpunit`
+Requires a PHP2Shell-patched PHP: `~8.2.35 || ~8.3.36 || ~8.4.27 || >=8.5.12`.
+
+Run `composer install`, then:
+
+```sh
+# Unit tests only (no database needed)
+./vendor/bin/phpunit --testsuite TestSuite
+
+# Everything, including the Integration suite, which saves encrypted Mondoc models to a real MongoDB
+docker run -d --rm --name mongo -p 27017:27017 mongo:8
+MONGO_CONNECTION_STRING='mongodb://localhost:27017' ./vendor/bin/phpunit
+```
+
+CI runs both suites on PHP 8.2–8.6 against MongoDB 7 and 8 service containers.
 
 ### Creating a new encryption adapter
 
