@@ -147,8 +147,6 @@ class SecretBoxAdapterTest extends TestAbstract
         // we use reflection to change the encryptionKey prop to a different length
         $reflection = new ReflectionClass($adapter);
         $property = $reflection->getProperty('encryptionKey');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $property->setAccessible(true);
         $property->setValue($adapter, '1234'); // invalid key length
         $this->expectException(MondocEncryptionException::class);
         $adapter->encrypt('a', 'foo');
@@ -166,8 +164,6 @@ class SecretBoxAdapterTest extends TestAbstract
         // we use reflection to change the encryptionKey prop to a different length
         $reflection = new ReflectionClass($adapter);
         $property = $reflection->getProperty('encryptionKey');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $property->setAccessible(true);
         $property->setValue($adapter, '1234'); // invalid key length
         $this->expectException(MondocEncryptionException::class);
         $adapter->decrypt('a', 'foo');

@@ -11,7 +11,6 @@
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
         bootstrap="tests/bootstrap.php"
-        cacheResult="false"
         failOnWarning="true">
   <coverage includeUncoveredFiles="true"
             pathCoverage="false"
@@ -28,6 +27,11 @@
   <testsuites>
     <testsuite name="TestSuite">
       <directory>tests/</directory>
+      <exclude>tests/Integration</exclude>
+    </testsuite>
+    <!-- Needs MONGO_CONNECTION_STRING; CI runs it against a MongoDB 7/8 service container. -->
+    <testsuite name="Integration">
+      <directory>tests/Integration</directory>
     </testsuite>
   </testsuites>
   <logging>
