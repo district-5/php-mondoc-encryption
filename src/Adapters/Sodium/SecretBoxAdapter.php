@@ -92,16 +92,17 @@ class SecretBoxAdapter extends AbstractSodiumAdapter implements EncryptionAdapte
         $value = serialize($value);
 
         $encryptionKey = $this->encryptionKey;
+        $nonce = $this->nonceForEncryption(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
 
         try {
             $encryptedValue = sodium_crypto_secretbox(
                 $value,
-                $this->nonce,
+                $nonce,
                 $encryptionKey
             );
-            if (sodium_crypto_secretbox_open($encryptedValue, $this->nonce, $encryptionKey) === false) {
+            if (sodium_crypto_secretbox_open($encryptedValue, $nonce, $encryptionKey) === false) {
                 throw new MondocEncryptionException(
-                    'Failed to encrypt the value: ' . sodium_crypto_secretbox_open($encryptedValue, $this->nonce, $encryptionKey)
+                    'Failed to encrypt the value: round-trip verification failed.'
                 );
             }
         } catch (Throwable $e) {
@@ -110,7 +111,7 @@ class SecretBoxAdapter extends AbstractSodiumAdapter implements EncryptionAdapte
             );
         }
 
-        return base64_encode($this->nonce . $encryptedValue);
+        return base64_encode($nonce . $encryptedValue);
     }
 
     /**

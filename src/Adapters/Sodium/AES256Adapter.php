@@ -81,12 +81,13 @@ class AES256Adapter extends AbstractSodiumAdapter implements EncryptionAdapterIn
     {
         $value = serialize($value);
         $encryptionKey = $this->encryptionKey;
+        $nonce = $this->nonceForEncryption(SODIUM_CRYPTO_AEAD_AES256GCM_NPUBBYTES);
 
         try {
             $encryptedValue = sodium_crypto_aead_aes256gcm_encrypt(
                 $value,
                 $field, // Additional authenticated data (AAD)
-                $this->nonce,
+                $nonce,
                 $encryptionKey
             );
         } catch (Throwable $e) {
@@ -95,7 +96,7 @@ class AES256Adapter extends AbstractSodiumAdapter implements EncryptionAdapterIn
             );
         }
 
-        return base64_encode($this->nonce . $encryptedValue);
+        return base64_encode($nonce . $encryptedValue);
     }
 
     /**
