@@ -52,6 +52,14 @@ abstract class AbstractSodiumAdapter implements EncryptionAdapterInterface
     protected string|null $nonce = null;
 
     /**
+     * Whether a nonce was explicitly given to the constructor. When false, a fresh random nonce
+     * is generated for every encrypt() call. Re-using a nonce with the same key is unsafe.
+     *
+     * @var bool
+     */
+    protected bool $nonceProvided = false;
+
+    /**
      * @param string|null $encryptionKey
      * @param int $numBytes
      * @return void
@@ -79,6 +87,7 @@ abstract class AbstractSodiumAdapter implements EncryptionAdapterInterface
      */
     protected function assignNonce(string|null $nonce, int $numBytes): void
     {
+        $this->nonceProvided = $nonce !== null;
         $this->nonce = $nonce;
         if ($this->nonce === null) {
             $this->nonce = self::getRandomOfLength($numBytes);
@@ -89,6 +98,22 @@ abstract class AbstractSodiumAdapter implements EncryptionAdapterInterface
                 );
             }
         }
+    }
+
+    /**
+     * Get the nonce to use for a single encryption. Unless a nonce was explicitly provided to the
+     * constructor, a new random nonce is generated (and stored as the current nonce) on every call.
+     *
+     * @param int $numBytes
+     * @return string
+     * @throws MondocEncryptionException
+     */
+    protected function nonceForEncryption(int $numBytes): string
+    {
+        if ($this->nonceProvided === false) {
+            $this->nonce = self::getRandomOfLength($numBytes);
+        }
+        return $this->nonce;
     }
 
     /**
@@ -128,6 +153,10 @@ abstract class AbstractSodiumAdapter implements EncryptionAdapterInterface
     }
 
     /**
+     * Get the current nonce. Unless a nonce was passed to the constructor, this is the nonce used by
+     * the most recent encrypt() call. It is not needed for decryption, as each encrypted value is
+     * prefixed with its own nonce.
+     *
      * @return string
      */
     public function getNonce(): string

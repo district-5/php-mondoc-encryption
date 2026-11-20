@@ -168,4 +168,44 @@ class SecretBoxAdapterTest extends TestAbstract
         $this->expectException(MondocEncryptionException::class);
         $adapter->decrypt('a', 'foo');
     }
+
+    /**
+     * Without an explicit nonce, each encryption must use a fresh nonce.
+     *
+     * @return void
+     * @throws MondocEncryptionException
+     */
+    public function testFreshNoncePerEncryption()
+    {
+        $adapter = new SecretBoxAdapter(SecretBoxAdapter::generateKey());
+        $first = $adapter->encrypt('field', 'same value');
+        $firstNonce = $adapter->getNonce();
+        $second = $adapter->encrypt('field', 'same value');
+        $this->assertNotEquals($first, $second);
+        $this->assertNotEquals($firstNonce, $adapter->getNonce());
+        $this->assertEquals('same value', $adapter->decrypt('field', $first));
+        $this->assertEquals('same value', $adapter->decrypt('field', $second));
+
+        // a separate adapter with only the key can decrypt both
+        $other = new SecretBoxAdapter($adapter->getEncryptionKey());
+        $this->assertEquals('same value', $other->decrypt('field', $first));
+        $this->assertEquals('same value', $other->decrypt('field', $second));
+    }
+
+    /**
+     * An explicitly provided nonce is still honoured (backwards compatibility).
+     *
+     * @return void
+     * @throws MondocEncryptionException
+     */
+    public function testExplicitNonceIsHonoured()
+    {
+        $nonce = SecretBoxAdapter::generateNonce();
+        $adapter = new SecretBoxAdapter(SecretBoxAdapter::generateKey(), $nonce);
+        $this->assertEquals(
+            $adapter->encrypt('field', 'same value'),
+            $adapter->encrypt('field', 'same value')
+        );
+        $this->assertEquals($nonce, $adapter->getNonce());
+    }
 }
